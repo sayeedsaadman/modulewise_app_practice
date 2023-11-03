@@ -15,10 +15,28 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Center(child: Text('Todo Works')),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){},
+        onPressed: () {
+          showModalBottomSheet(context: context, builder: (context) {
+            return Column(
+              children: [
+                Text("Add new to do work", style: Theme.of(context).textTheme.titleLarge,),
+                SizedBox(height: 10,),
+                TextFormField(
+                  decoration: InputDecoration(
+                    hintText: "Enter your todo here",
+                  enabledBorder: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 16,),
+                ElevatedButton(onPressed: () {}, child: const Text("Add"),)
+              ],
+            );
+          });
+        },
         child: Icon(Icons.add),
       ),
-      body: ListView.builder(
+      body: ListView.separated(
           itemCount : 10,
           itemBuilder: (context,index){
         return ListTile(
@@ -29,7 +47,12 @@ class _HomeScreenState extends State<HomeScreen> {
           subtitle: Text("Date"),
           trailing: Text("pending"),
         );
-      }),
+      }, separatorBuilder: (BuildContext context, int index) {
+            return const Divider(
+              height: 5,
+            );
+      },
+      ),
     );
   }
 }

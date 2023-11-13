@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'UpdateTaskModel.dart';
+import 'AddNewTastModel.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -10,49 +12,70 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: Center(child: Text('Todo Works')),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showModalBottomSheet(context: context, builder: (context) {
-            return Column(
-              children: [
-                Text("Add new to do work", style: Theme.of(context).textTheme.titleLarge,),
-                SizedBox(height: 10,),
-                TextFormField(
-                  decoration: InputDecoration(
-                    hintText: "Enter your todo here",
-                  enabledBorder: OutlineInputBorder(),
-                  focusedBorder: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 16,),
-                ElevatedButton(onPressed: () {}, child: const Text("Add"),)
-              ],
-            );
-          });
+          showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return const AddNewTaskModel();
+              });
         },
         child: Icon(Icons.add),
       ),
       body: ListView.separated(
-          itemCount : 10,
-          itemBuilder: (context,index){
-        return ListTile(
-          leading: CircleAvatar(
-            child: Text("${index+1}"),
-          ),
-          title: Text("i need to go to dhaka"),
-          subtitle: Text("Date"),
-          trailing: Text("pending"),
-        );
-      }, separatorBuilder: (BuildContext context, int index) {
-            return const Divider(
-              height: 5,
-            );
-      },
+        itemCount: 10,
+        itemBuilder: (context, index) {
+          return ListTile(
+            onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text('Actions'),
+                      content: Column(
+                        children: [
+                          ListTile(
+                            leading: Icon(Icons.edit),
+                            title: Text('Update'),
+                            onTap: () {
+                              Navigator.pop(context);
+                              showModalBottomSheet(context: context, builder: (context){
+                                return const UpdateTaskModel();
+                              });
+                            },
+                          ),
+                          Divider(
+                            height: 5,
+                          ),
+                          ListTile(
+                            leading: Icon(Icons.delete),
+                            title: Text("Delete"),
+                            onTap: () {},
+                          ),
+                        ],
+                      ),
+                    );
+                  });
+            },
+            leading: CircleAvatar(
+              child: Text("${index + 1}"),
+            ),
+            title: Text("i need to go to dhaka"),
+            subtitle: Text("Date"),
+            trailing: Text("pending"),
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return const Divider(
+            height: 0,
+          );
+        },
       ),
     );
   }
 }
+
